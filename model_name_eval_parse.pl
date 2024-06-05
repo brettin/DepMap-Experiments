@@ -1,13 +1,18 @@
 # parses the output of the ipynb
-# assumes ($choice, $answer, $correct_choice, $correct_answer, $score)
+# CHOICE	ANSWER	CORRECT CHOICE	CORRECT ANSWER	CELL_LINE_NAME	SCORE
+# assumes ($choice, $answer, $correct_choice, $correct_answer, $cell_line_name, $score)
 while(<>){
 	next if /CHOICE/;
 	chomp;
-	my ($choice, $answer, $correct_choice, $correct_answer, $score) =split/\t/; 
-	$correct{$correct_answer} = $correct{$correct_answer} + $score;
-	$total{$correct_answer} = $total{$correct_answer} + 1;
+	my ($choice, $answer, $correct_choice, $correct_answer, $cell_line_name, $score) =split/\t/; 
+	$c{$correct_answer} = $c{$correct_answer} + $score ;
+	$t{$correct_answer} = $t{$correct_answer} + 1 ;
+	$num_correct = $num_correct + $score;
+	$total = $total + 1;
 }
 
-foreach $k (keys %correct) {
-	print $k, ",", $correct{$k}, ",", $total{$k}, ",", $correct{$k}/$total{$k} * 100, "\n";
+print STDERR "$num_correct responses out of $total\n";
+
+foreach $k (keys %c) {
+	print $k, ",", $c{$k}, ",", $t{$k}, ",", $c{$k}/$t{$k} * 100, "\n";
 }
