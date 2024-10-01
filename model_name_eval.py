@@ -4,7 +4,7 @@ parser.add_argument("--port", type=int, default=8000, help="The vLLM port number
 parser.add_argument("--host", type=str, default="localhost", help="The vLLM host name")
 parser.add_argument("--model", type=str, default="mistralai/Mixtral-8x7B-Instruct-v0.1", help="repo/model")
 parser.add_argument("--key", type=str, default="cmsc-35360", help="The key for vllm server")
-parser.add_argument("--range", type=str, default=10, help="The number of times to repeat the text.")
+parser.add_argument("--replicates", type=int, default=10, help="The number of times to repeat the text.")
 parser.add_argument("--file", type=str, default ="./depmap/Model.csv.gz", help="Name of the DepMap file")
 
 args = parser.parse_args()
@@ -12,6 +12,7 @@ host = args.host
 port = args.port
 model = args.model
 key = args.key
+replicates = args.replicates
 f=args.file
 
 print(f'using host: {host}')
@@ -123,7 +124,7 @@ You will be presented with a series of multiple-choice questions. Please select 
 correct choice. Return the answer in JSON format {"CHOICE": "choice", "ANSWER": "answer"}
 where choice is only the alphabetic character associated with the full answer.'''
 
-for i in range(0, 10):
+for i in range(0, replicates):
     num_correct = 0
     total = 0
     responses = []
@@ -191,8 +192,8 @@ for i in range(0, 10):
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
 
     response_df = pd.DataFrame(responses)
-    response_df.to_csv(f'{ofile_prefix}_model_name_eval_{timestamp}.tsv', index=None, sep="\t")
+    response_df.to_csv(f'{f_prefix}_model_name_eval_{timestamp}.tsv', index=None, sep="\t")
 
-    with open(f'{ofile_prefix}_model_name_eval_summary.txt', 'a') as f:
+    with open(f'{f_prefix}_model_name_eval_summary.txt', 'a') as f:
         print(f'{timestamp}\t{num_correct} correct responses out of {total}', file=f)
 

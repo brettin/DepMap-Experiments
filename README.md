@@ -23,3 +23,22 @@ df[['OncotreeLineage','OncotreePrimaryDisease','OncotreeSubtype','Age','Sex','Pa
 	CUDA_VISIBLE_DEVICES=$n 
 	python ./tool_collection/pull_papers/nougat_pdf.py ./chunk/$n/
     done
+
+# Files
+```
+mixtral8x22B.ipynb	This is a simple example of one shot learning. Can				probably be deleted.
+
+model_disease_eval.ipynb
+The primary disease {disease} can be best studied using which cell line?
+
+model_name_eval.ipynb
+The cell line named {cell_line_name} is a biological model for which primary disease?
+** Does not have one shot learing built into the prompt.
+
+model_name_eval-mixtral8x22B-Instruct-v0.1.ipynb
+The cell line named {cell_line_name} is a biological model for which primary disease?
+** Has one shot learning built into the prompt. TODO: Depricate OSL or include in other tests.
+
+
+```
+
