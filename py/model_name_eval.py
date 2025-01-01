@@ -100,6 +100,15 @@ d) {d['d']}'''
     return question, correct_choice, correct_answer, cell_line_name
 
 
+def parse_first_json_string(json_string):
+    # Find the indicies of the first json_string
+    start_index = json_string.find('{')
+    end_index = json_string.find('}') + 1
+
+    # Extract the substring between the curly brackets
+    extracted_json = json_string[start_index:end_index]
+
+    return extracted_json
 
 
 # Main
@@ -153,7 +162,11 @@ for i in range(0, replicates):
         )
         
         try:
-            response = json.loads(chat_response.choices[0].message.content)
+            parse_first_json_string(chat_response.choices[0].message.content)
+            response = json.loads(
+                    parse_first_json_string(chat_response.choices[0].message.content)
+                    )
+
             response['CORRECT CHOICE'] = correct_choice
             response['CORRECT ANSWER'] = correct_answer
             response['CELL_LINE_NAME'] = cell_line_name
@@ -184,9 +197,9 @@ for i in range(0, replicates):
             
             pass
 
-        except Exception as e:
-            print(f"Error generating answer: {e}")
-            pass
+        #except Exception as e:
+        #    print(f"Error generating answer: {e}")
+        #    pass
     
     print(f'{num_correct} correct responses out of {total}')
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")

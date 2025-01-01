@@ -22,7 +22,12 @@ model='meta-llama/Meta-Llama-3-70B-Instruct'
 model='meta-llama/Meta-Llama-3-8B-Instruct'
 model='meta-llama/Meta-Llama-3.1-70B-Instruct'
 model='llama31-405b-fp8'  # first time server was started with --served-model-name
+# --model deepseek-ai/DeepSeek-V3
+# --served-model-name deepseekV3
+model='deepseekV3'
+
 openai_api_key = 'cmsc-35360'
+openai_api_key = 'CELS'
 openai_api_base = f"http://{host}:{port}/v1"
 
 
@@ -162,9 +167,17 @@ def debug(index, disease, df, answer):
 
     return filtered_array
 
+def parse_first_json_string(json_string):
+    # Find the indicies of the first json_string
+    start_index = json_string.find('{')
+    end_index = json_string.find('}') + 1
 
-# In[ ]:
+    # Extract the substring between the curly brackets
+    extracted_json = json_string[start_index:end_index]
 
+    return extracted_json
+
+# main
 
 import json
 from tqdm import tqdm
@@ -230,7 +243,10 @@ for i in range(0, 10): # 9):
         
         
         try:
-            response = json.loads(chat_response.choices[0].message.content)
+            response = json.loads(
+                    parse_first_json_string(chat_response.choices[0].message.content)
+                    )
+
             response['CORRECT CHOICE'] = correct_choice
             response['CORRECT ANSWER'] = correct_answer
             response['PRIMARY_DISEASE'] = disease
@@ -271,9 +287,9 @@ for i in range(0, 10): # 9):
             responses.append(response)
             pass
             
-        except MyException as e:
-            print(f"Error finding unique answer: {e}")
-            pass
+        #except MyException as e:
+        #    print(f"Error finding unique answer: {e}")
+        #    pass
     
     print(f'{num_correct} correct responses out of {total}')
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
