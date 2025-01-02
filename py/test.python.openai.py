@@ -8,6 +8,8 @@ parser.add_argument("--host", type=str, default="localhost",
 		    help="host name")
 parser.add_argument("--model", type=str, default="mistralai/Mixtral-8x7B-Instruct-v0.1",
                     help="repo/model")
+parser.add_argument("--key", type=str, default="EMPTY",
+                    help="vllm API key")
 
 args = parser.parse_args()
 print(f'using host: {args.host}')
@@ -15,7 +17,7 @@ print(f'using port: {args.port}')
 print(f'using model: {args.model}')
 
 # Set OpenAI's API key and API base to use vLLM's API server.
-openai_api_key = "EMPTY"
+openai_api_key = args.key
 openai_api_base = f"http://{args.host}:{args.port}/v1"
 
 client = OpenAI(
