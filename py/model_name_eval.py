@@ -1,4 +1,19 @@
+# Get the directory containing the script
+import os
+import sys
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+print(f"Script directory: {script_dir}")
+if script_dir not in sys.path:
+    sys.path.append(script_dir)
+
+import pandas as pd
+import random
+from _util import _print
+_t = _print("start")
+
 import argparse
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--port", type=int, default=8000, help="The vLLM port number")
 parser.add_argument("--host", type=str, default="localhost", help="The vLLM host name")
@@ -28,14 +43,12 @@ else:
     f_prefix = parts[0]
 f_prefix = f_prefix + "_no_lora"
 
-import pandas as pd
 def load_data(f):
     df=pd.read_csv(f)
     print(f'done importing dataframe (rows, columns) = {df.shape}.')
     return df
 
 
-import random
 def select_random_element_not_equal_to(array, correct):
     '''
     Given an array of unique answers, select an answer not
@@ -134,6 +147,8 @@ correct choice. Return the answer in JSON format {"CHOICE": "choice", "ANSWER": 
 where choice is only the alphabetic character associated with the full answer.'''
 
 for i in range(0, replicates):
+    _t = _print(f"running eval {i}", _t)
+
     num_correct = 0
     total = 0
     responses = []
@@ -205,3 +220,4 @@ for i in range(0, replicates):
     with open(f'{f_prefix}_model_name_eval_summary.txt', 'a') as f:
         print(f'{timestamp}\t{num_correct} correct responses out of {total}', file=f)
 
+_t = _print("done", _t)

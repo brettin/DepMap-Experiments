@@ -1,33 +1,40 @@
-#!/usr/bin/env python
-# coding: utf-8
 
-# In[1]:
+# Get the directory containing the script
+import os
+import sys
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+print(f"Script directory: {script_dir}")
+if script_dir not in sys.path:
+    sys.path.append(script_dir)
 
 import pandas as pd
 from openai import OpenAI
 import random
+from _util import _print
 
-
-# In[2]:
+_t = _print("start")
 
 
 # Arguments
 infile='../depmap/Model.csv.gz'
-host='127.0.0.1'
-host='localhost'
-port='9999'
-#port='8000'
-model='meta-llama/Meta-Llama-3-70B-Instruct'
-model='meta-llama/Meta-Llama-3-8B-Instruct'
-model='meta-llama/Meta-Llama-3.1-70B-Instruct'
-model='llama31-405b-fp8'  # first time server was started with --served-model-name
-# --model deepseek-ai/DeepSeek-V3
-# --served-model-name deepseekV3
-model='deepseekV3'
 
-openai_api_key = 'cmsc-35360'
+#host='127.0.0.1'
+#host='localhost'
+host='rbdgx2.cels.anl.gov'
+
+port='9999'
+
+#model='meta-llama/Meta-Llama-3-70B-Instruct'
+#model='meta-llama/Meta-Llama-3-8B-Instruct'
+#model='meta-llama/Meta-Llama-3.1-70B-Instruct'
+#model='llama31-405b-fp8'
+#model='deepseekV3'
+model='meta-llama/Llama-3.3-70B-Instruct'
+
+#openai_api_key = 'cmsc-35360'
 openai_api_key = 'CELS'
+
 openai_api_base = f"http://{host}:{port}/v1"
 
 
@@ -208,6 +215,7 @@ Continue until the experts agree on the single most likely choice. Return the re
 associated with the full answer.'''
  
 for i in range(0, 10): # 9):
+    _t = _print(f"running eval {i}", _t)
     num_correct = 0
     total = 0
     responses = []
@@ -285,4 +293,6 @@ for i in range(0, 10): # 9):
 
     with open(f_prefix + '_disease_eval_summary.txt', 'a') as f:
         print(f'{timestamp}\t{num_correct} correct responses out of {total}', file=f)
+
+_t = _print("done", _t)
 
