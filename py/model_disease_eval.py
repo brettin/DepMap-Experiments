@@ -256,26 +256,15 @@ for i in range(0, 10): # 9):
                 num_correct = num_correct + 1
             else:
                 response['SCORE'] = 0
-                filtered_array = debug(i, disease, df, response["ANSWER"])
-                if len(filtered_array) > 0:
-                    print(f'{question}\n')
-                    print(f'choice: {response["CHOICE"]} answer: {response["ANSWER"]}')
-                    print(f'correct choice: {response["CORRECT CHOICE"]} correct answer: {response["CORRECT ANSWER"]}')
-                    print(f'index: {i}')
-                    print(f'wrong answer found in filtered array {filtered_array}')
-
-                    class MyException(Exception):
-                        pass
-                    raise MyException("My hovercraft is full of eels")
 
             total = total + 1
             responses.append(response)
-            #print(f'{response}') 
 
         except json.JSONDecodeError as e:
             print(f"Error decoding JSON: {e}")
-            print(f"{question}")
-            print(f"{chat_response.choices[0].message.content}")
+            print(f"QUESTION:\n{question}")
+            print(f"MODEL RESPONSE:\n{chat_response.choices[0].message.content}")
+            print(f"CORRECT RESPONSE:\n{correct_choice}. {correct_answer}")
 
             response["CHOICE"] =  "e"
             response["ANSWER"] =  chat_response.choices[0].message.content
@@ -283,14 +272,11 @@ for i in range(0, 10): # 9):
             response['CORRECT ANSWER'] = correct_answer
             response['PRIMARY_DISEASE'] = disease
             response['SCORE'] = 0
-            
             responses.append(response)
+
             pass
             
-        #except MyException as e:
-        #    print(f"Error finding unique answer: {e}")
-        #    pass
-    
+
     print(f'{num_correct} correct responses out of {total}')
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
 

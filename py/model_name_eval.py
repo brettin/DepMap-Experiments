@@ -156,9 +156,8 @@ for i in range(0, replicates):
             # logprobs=1,
             # top_logprobs=1,
             messages=messages,
-            #temperature=0.0,
-            #max_tokens=2000,
-            stream=False,
+            temperature=0.0,
+            max_tokens=2560,
         )
         
         try:
@@ -182,6 +181,9 @@ for i in range(0, replicates):
 
         except json.JSONDecodeError as e:
             print(f"Error decoding JSON: {e}")
+            print(f"QUESTION:\n{question}")
+            print(f"MODEL RESPONSE:\n{chat_response.choices[0].message.content}")
+            print(f"CORRECT RESPONSE:\n{correct_choice}. {correct_answer}")
 
             response["CHOICE"] =  "e"
             response["ANSWER"] =  chat_response.choices[0].message.content
@@ -191,16 +193,9 @@ for i in range(0, replicates):
             response['SCORE'] = 0
             responses.append(response)
 
-            print(f"QUESTION:\n{question}")
-            print(f"MODEL RESPONSE:\n{chat_response.choices[0].message.content}")
-            print(f"CORRECT RESPONSE:\n{correct_choice}. {correct_answer}")
-            
             pass
-
-        #except Exception as e:
-        #    print(f"Error generating answer: {e}")
-        #    pass
     
+
     print(f'{num_correct} correct responses out of {total}')
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
 
