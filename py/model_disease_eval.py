@@ -18,35 +18,29 @@ _t = _print("start")
 
 # Arguments
 infile='../depmap/Model.csv.gz'
-
-#host='127.0.0.1'
-#host='localhost'
-host='rbdgx2.cels.anl.gov'
-
+host='rbdgx1.cels.anl.gov'
 port='9999'
+key='CELS'
 
 #model='meta-llama/Meta-Llama-3-70B-Instruct'
 #model='meta-llama/Meta-Llama-3-8B-Instruct'
 #model='meta-llama/Meta-Llama-3.1-70B-Instruct'
 #model='llama31-405b-fp8'
 #model='deepseekV3'
-model='meta-llama/Llama-3.3-70B-Instruct'
+#model='meta-llama/Llama-3.3-70B-Instruct'
+model='Qwen/Qwen3-Next-80B-A3B-Instruct'
 
-#openai_api_key = 'cmsc-35360'
 openai_api_key = 'CELS'
-
 openai_api_base = f"http://{host}:{port}/v1"
 
 
-# In[3]:
-
-
-#f_prefix = model.split("/")[1]
-# using --served-model-name messed up my code
-f_prefix = model
-
+parts = model.split("/")
+if(len(parts) != 1):
+    f_prefix = parts[1]
+else:
+    f_prefix = parts[0]
 f_prefix = f_prefix + "_no_lora"
-f_prefix
+
 
 
 
